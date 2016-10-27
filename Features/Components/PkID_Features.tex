@@ -1,0 +1,477 @@
+\section{PkID中用到的特征}
+PkID中用到的特征一共有67个：Area, Mean, StdDev, Mode, Min, Max, X, Y, XM, YM, Perim., BX, BY, Width, Height, Major, Minor, Angle, Circ., Feret, IntDen, Median, Skew, Kurt, \%Area, XStart, YStart, Area\_exc, Fractal, Skelarea, Slope, Histcum1, Histcum2, Histcum3, XMg5, YMg5, Compentropy, Compmean, Compslope, CompM1, CompM2, CompM3, Symetrieh, Symetriev,Tag, ESD, Elongation, Range, MeanPos, CentroidsD, CV, SR, PerimAreaexc, FeretAreaexc, PerimFeret, PerimMaj, Circexc, CDexc, {\color{blue}Nb1, Nb2, Nb3,  Symetriehc, Symetrievc, Convperim, Convarea, Fcons, ThickR（这几个特征没有找到具体的含义）}
+
+从训练集的PID文件文件中看到，Compentropy, Compmean, Compslope, CompM1, CompM2, CompM3这6个特征在所有图像上的值都为0，Tag这个特征在所有图像上的值都为1，在训练分类器时是不起作用的，同时这7个特征的具体含义也没有找到。
+
+\subsection{位置特征}
+\begin{description}
+\item[BX] 能够包围物体，且平行于图像两条边的最小外界矩形的左上角顶点的X坐标 
+\item[BY] 能够包围物体，且平行于图像两条边的最小外界矩形的左上角顶点的Y坐标 
+\item[Height] 能够包围物体，且平行于图像两条边的最小外界矩形的高
+\item[Width] 能够包围物体，且平行于图像两条边的最小外界矩形的宽
+\item[XStart] 图像最左上角像素点的X坐标
+\item[YStart] 图像最左上角像素点的Y坐标
+\item[XM] 物体灰度重心的X坐标
+\item[YM] 物体灰度重心的Y坐标
+\item[XMg5] gamma值为51时的物体灰度重心的X坐标（gamma值表示图像输出值与输入值关系的斜率）
+\item[YMg5] gamma值为51时的物体灰度重心的Y坐标
+\item[X] 物体重心点的X坐标
+\item[Y] 物体重心点的Y坐标
+\item[Angle] 浮游动物主轴与图片x轴形成的夹角，在图片切割后旋转图片测量相关参数使用
+\end{description}
+
+这类特征反映的是浮游动物在图像中的位置信息，浮游动物特征与位置信息无关，因此它们不适合作为特征直接用于分类（会降低分类的准确率），而是用来计算其他特征（尺寸特征、灰度特征和形状特征）。
+
+\subsection{尺寸特征}
+
+\begin{description}
+\item[Area] 物体的表面积，方形像素的个数%包含物体的最小矩形面积 
+\item[Perim] 周长，物体最外层边缘的长度
+\item[Major] 物体的最佳拟合椭圆的长轴%物体内切椭圆的长轴
+\item[Minor] 物体的最佳拟合椭圆的短轴%物体内切椭圆的短轴
+\item[Feret] Maximum feret diameter（最大费雷特径）, 沿物体边缘任意两个点的最长距离
+\item[Area\_exc] 去掉物体空洞后的表面积，空洞是指灰度值与背景相同的部分
+\item[\%area] 物体表面积中空洞所占的百分比，即背景所占的比例
+\end{description}
+
+这类特征表示了图像中目标的大小尺寸。它的根据是同类浮游动物的表面积、周长等尺寸特征应该是大致相同的。但是这些特征还存在着问题：1、同类浮游动物在不同时期（如幼年和成年）的个体大小尺寸是不同的。2、拍摄照片的方位不同（比如正面和侧面）得到的尺寸特征也是不同的。
+
+\subsection{灰度值特征}
+
+\begin{description}
+    \item[Min] 物体内部所有像素点的最小灰度值 (0 = black)
+    \item[Max] 物体内部所有像素点的最大灰度值 (255 = white)
+    \item[IntDen (Integrated density)] 总密度，物体内像素点的灰度值的总和（$IntDen = Area * Mean$）
+    \item[Slope] 归一化的灰度累计直方图的斜率
+    \item[Histcum1] 灰度累计直方图的值为25\%时所对应的灰度值
+    \item[Histcum2] 灰度累计直方图的值为50\%时所对应的灰度值
+    \item[Histcum3] 灰度累计直方图的值为75\%时所对应的灰度值
+    \item[CentroidsD] $\sqrt{(XM-X)^{2}+(YM-Y)^{2}}$ 目标物体重心和灰度重心之间的距离。
+\end{description}
+
+%这类特征描述的是浮游动物的灰度特征，其中Min、Max、StdDev、Range反映了图像中目标的灰度范围，Skew、Kurt、Slope、Histcum1、Histcum2、Histcum3、Mean、IntDen、Mode、Mean\_exc、Median反映了目标整体的灰度变化和集中趋势，CentroidsD、CV、SR还不清楚它们的物理意义。
+
+根据是同类浮游动物的灰度特征（灰度的范围和整体灰度变换趋势）应该是相似的，但观察图像发现并不是所有同类浮游动物的灰度都是相似的，例如Gelatinous类中有的个体灰度跨度较小，整体灰度都较浅，而有的个体灰度跨度较大；同时由于拍摄时光线的原因，会造成同类浮游动物中个体灰度的深浅不一。
+
+\subsection{形状特征}
+
+\begin{description}
+    \item[Fractal] 物体边界的分形维数 (Berube and Jebrak, 1999)，表明物体边界的不规则程度
+    \item[Skelarea] 骨架像素的表面积（在二值图像中，不断地从物体边缘处减去像素点直到仅剩一个像素的宽度，最后所得图形的像素点数）
+    \item[Symetrieh] 关于水平轴的对称性
+    \item[Symetriev] 关于竖直轴的对称性
+    \item[Circ] $Circularity = (4 * Pi * Area) / Perim^2$ 圆形度，表征物体接近圆的程度，值等于1时，说明物体为正圆形，值越接近0，物体体形越长。
+    \item[ESD] $2 \times \sqrt{\cfrac{Area}{\pi}}$ 相应球形直径（也称为等效球直径），是指一不规则外形物体，其体积相同球体的直径。
+    \item[Elongation] $\cfrac{Major}{Minor}$ 延伸率，最佳拟合椭圆的长轴和短轴之比。
+    \item[Circexc] $\cfrac{4 \times \pi Area\_exc}{Perim^{2}}$ 去掉目标内部空洞的圆形度。
+\end{description}
+
+这类特征描述的是浮游动物的灰度特征，根据的是不同种类浮游动物的形状不同。存在的问题是有不同种类的浮游动物形状相似，例如Appendicularia和Chaetognatha，Bubble和Egg；也有同种浮游动物形状不同，例如Decapoda、Gelatinous。
+
+\subsection{生物统计特征}
+
+\begin{description}
+    \item[Mean] 物体内的平均灰度值；物体中所有像素点的灰度值的总和除以总的像素个数    
+    \item[Range] $Max-Min$ 极差，灰度的范围。    
+    \item[CV] $100 \times \cfrac{StdDev}{Mean}$ 变异系数（也称离散系数或相对偏差），是灰度标准偏差与平均值之比，用百分数表示。
+    \item[SR] $100 \times \cfrac{StdDev}{Max-Min}$ 灰度标准差比上极差。
+    \item[Skew] 灰度直方图的偏度，衡量灰度分布的不对称性。偏度为负就意味着在概率密度函数左侧的尾部比右侧的长，绝大多数的值位于平均值的右侧。偏度为正就意味着在概率密度函数右侧的尾部比左侧的长，绝大多数的值位于平均值的左侧。偏度为零就表示数值相对均匀地分布在平均值的两侧，但不一定意味着其为对称分布。
+    \item[Kurt] 峰度，描述灰度直方图的陡缓程度。 
+    \item[Mean\_exc] 物体内部去掉空洞后的平均灰度值 ($Mean\_exc = IntDen / Area\_exc$)
+    \item[Median] 物体内像素的灰度值的中值
+    \item[StdDev] 物体内像素的灰度值的标准差
+    \item[Mode] Modal grey value within the object（可能表示灰度的众数）
+\end{description}
+
+\subsection{还没有查找到的特征}
+\begin{description}
+    \item[MeanPos] $\cfrac{Mean-Max}{Max-Min}$
+    \item[PerimAreaexc] $\cfrac{Perim}{\sqrt{Area\_exc}}$ 
+    \item[FeretAreaexc] $\cfrac{Feret}{\sqrt{Area\_exc}}$
+    \item[PerimFeret] $\cfrac{Perim}{Feret}$
+    \item[PerimMaj] $\cfrac{Perim}{Major}$
+    \item[CDexc] $\cfrac{\sqrt{(XM-X)^{2}+(YM-Y)^{2}}}{{\sqrt{Area\_exc}}}$ 
+    \item[Nb1] 在图像在用阈值Histcum1二值化后剩余对象的数量
+    \item[Nb2] 在图像在用阈值Histcum2二值化后剩余对象的数量
+    \item[Nb3] 在图像在用阈值Histcum3二值化后剩余对象的数量
+    \item[Symetriehc] 在图像在用阈值Histcum1二值化后物体的水平对称性
+    \item[Symetrievc] 在图像在用阈值Histcum1二值化后物体的垂直对称性
+    \item[Convperim] 包围物体凸包的周长
+    \item[Convarea] 包围物体凸包的面积
+    \item[Fcons] 灰度对比度
+    \item[ThickR] 物体最大厚度和平均厚度（不包括最大厚度）的比值
+\end{description}
+
+\subsection{其他特征}
+这些特征并没有在PkID中使用，而是在作者的一个幻灯片中提到的新特征。
+\begin{description}
+\item[Neighborhood gray-tone difference Matrix (NGTDM)] 邻域灰度差别矩阵
+\item[Cumulation Histogram] 累积直方图
+\item[Convex Area] 
+\item[Symmetry] 
+\item[Thickness Ratio]
+\end{description}
+
+
+\section{采用PkID中的特征进行实验}
+
+\subsection{采用PkID中的67个特征进行实验}
+\subsubsection{PkID中67个特征+SVM Linear}
+在PkID软件中，选用67个特征和SVM Linear分类器进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear}，其分类准确率为70.6\%。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear}
+\caption{PkID软件中SVM Linear分类器分类结果}
+\label{fig:PkID-SVM-Linear}
+\end{figure}
+
+PkID系统中SVM Linear的参数如图~\ref{fig:SVM-Linear-Parameters}。根据图中的参数，自己设计的SVM Linear分类器得到的混淆矩阵如图~\ref{fig: PkID-SVM-2-folds-5-repetitions}。在采用SVM进行训练之前，要先对特征进行归一化。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.4\linewidth]{SVM-Linear-Parameters}
+\caption{PkID系统中SVM Linear的参数}
+\label{fig:SVM-Linear-Parameters}
+\end{figure}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-2-folds-5-repetitions}
+\caption{PkID-SVM交叉验证，folds取2，repetitions取5}
+\label{fig: PkID-SVM-2-folds-5-repetitions}
+\end{figure}
+
+\subsubsection{PkID中67个特征+RandomForest}
+在PkID软件中，选用67个特征和随机森林分类器进行训练和分类得到的结果如图~\ref{fig:PkID-RF}，其分类准确率为75.4\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RF}
+\caption{PkID软件中随机森林分类器分类结果}
+\label{fig:PkID-RF}
+\end{figure}
+
+自己设计随机森林分类器，对67个特征进行训练和分类得到的混淆矩阵如图~\ref{fig: PkID-RF-2-folds-5-repetitions}。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RF-2-folds-5-repetitions}
+\caption{PkID-RF交叉验证，folds取2，repetitions取5}
+\label{fig: PkID-RF-2-folds-5-repetitions}
+\end{figure}
+
+\subsection{将67个特征分类进行实验}
+\subsubsection{形状特征+SVM Linear}
+在PkID软件中，从67个特征中选取形状特征（8个），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-Shape}，其分类准确率为37\%。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-Shape}
+\caption{采用形状特征SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-Shape}
+\end{figure}
+
+\subsubsection{形状特征+RandomForest}
+在PkID软件中，从67个特征中选取形状特征（8个），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-Shape}，其分类准确率为63.1\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-Shape}
+\caption{采用形状特征随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-Shape}
+\end{figure}
+
+\subsubsection{灰度特征+SVM Linear}
+在PkID软件中，从67个特征中选取灰度特征（18个，包括生物统计特征），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-Gray}，其分类准确率为37.6\%。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-Gray}
+\caption{采用灰度特征SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-Gray}
+\end{figure}
+
+\subsubsection{灰度特征+RandomForest}
+在PkID软件中，从67个特征中选取灰度特征（18个，包括生物统计特征），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-Gray}，其分类准确率为61.3\%。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-Gray}
+\caption{采用灰度特征随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-Gray}
+\end{figure}
+
+\subsubsection{生物统计特征+SVM Linear}
+在PkID软件中，从67个特征中选取生物统计特征（16个，包括没有查找到的特征），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-Bio}，其分类准确率为52.4\%。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-Bio}
+\caption{采用生物统计特征SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-Bio}
+\end{figure}
+
+\subsubsection{生物统计特征+RandomForest}
+在PkID软件中，从67个特征中选取生物统计特征（16个，包括没有查找到的特征），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-Bio}，其分类准确率为69.9\%。
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-Bio}
+\caption{采用生物统计特征随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-Bio}
+\end{figure}
+
+\subsubsection{不包括位置特征+SVM Linear}
+在PkID软件中，从67个特征中去掉13个位置特征，并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-No-Position}，其分类准确率为70.8\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-No-Position}
+\caption{不采用位置特征SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-No-Position}
+\end{figure}
+
+\subsubsection{不包括位置特征+RandomForest}
+在PkID软件中，从67个特征中去掉13个位置特征，并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-No-Position}，其分类准确率为76.1\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-No-Position}
+\caption{不采用位置特征随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-No-Position}
+\end{figure}
+
+\subsubsection{不包括位置特征和尺度特征+SVM Linear}
+在PkID软件中，从67个特征中去掉位置特征和尺度特征，并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-No-PositionSize}，其分类准确率为70.3\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-No-PositionSize}
+\caption{不采用位置特征和尺度特征SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-No-PositionSize}
+\end{figure}
+
+\subsubsection{不包括位置特征和尺度特征+RandomForest}
+在PkID软件中，从67个特征中去掉位置特征和尺度特征，并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-No-PositionSize}，其分类准确率为76.4\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-No-PositionSize}
+\caption{不采用位置特征和尺度特征随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-No-PositionSize}
+\end{figure}
+
+\subsubsection{不包括位置特征、尺度特征和灰度特征+SVM Linear}
+在PkID软件中，从67个特征中去掉位置特征、尺度特征和灰度特征，并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-No-PositionSizeGray}，其分类准确率为69.2\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-No-PositionSizeGray}
+\caption{不采用位置特征、尺度特征和灰度特征SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-No-PositionSizeGray}
+\end{figure}
+
+\subsubsection{不包括位置特征、尺度特征和灰度特征+RandomForest}
+在PkID软件中，从67个特征中去掉位置特征、尺度特征和灰度特征，并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-No-PositionSizeGray}，其分类准确率为77.2\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-No-PositionSizeGray}
+\caption{不采用位置特征、尺度特征和灰度特征随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-No-PositionSizeGray}
+\end{figure}
+
+\subsubsection{不包括位置特征、尺度特征、灰度特征和形状特征+SVM Linear}
+在PkID软件中，从67个特征中去掉位置特征、尺度特征、灰度特征和形状特征，并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-No-PositionSizeGrayShape}，其分类准确率为63.3\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-No-PositionSizeGrayShape}
+\caption{不采用位置特征、尺度特征、灰度特征和形状特征SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-No-PositionSizeGrayShape}
+\end{figure}
+
+\subsubsection{不包括位置特征、尺度特征、灰度特征和形状特征+RandomForest}
+在PkID软件中，从67个特征中去掉位置特征、尺度特征、灰度特征和形状特征，并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-No-PositionSizeGrayShape}，其分类准确率为75.7\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-No-PositionSizeGrayShape}
+\caption{不采用位置特征、尺度特征、灰度特征和形状特征随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-No-PositionSizeGrayShape}
+\end{figure}
+
+\subsection{从67个特征中选取部分特征进行实验}
+\subsubsection{选取16个特征+SVM Linear}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取16个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-16Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-16Features}
+\caption{选取16个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-16Features}
+\end{figure}
+
+\subsubsection{选取16个特征+RandomForest}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取16个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-16Features}，其分类准确率为72.76\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-16Features}
+\caption{选取16个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-16Features}
+\end{figure}
+
+\subsubsection{选取18个特征+SVM Linear}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取18个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-18Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-18Features}
+\caption{选取18个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-18Features}
+\end{figure}
+
+\subsubsection{选取18个特征+RandomForest}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取18个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-18Features}，其分类准确率为74.59\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-18Features}
+\caption{选取18个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-18Features}
+\end{figure}
+
+\subsubsection{选取19个特征+SVM Linear}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取19个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Mean、stdDev、Mode），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-19Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-19Features}
+\caption{选取19个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-19Features}
+\end{figure}
+
+\subsubsection{选取19个特征+RandomForest}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取19个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Mean、stdDev、Mode），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-19Features}，其分类准确率为73.04\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-19Features}
+\caption{选取19个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-19Features}
+\end{figure}
+
+\subsubsection{选取21个特征+SVM Linear}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取21个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev、Mean、stdDev、Mode），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-21Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-21Features}
+\caption{选取21个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-21Features}
+\end{figure}
+
+\subsubsection{选取21个特征+RandomForest}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取21个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev、Mean、stdDev、Mode），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-21Features}，其分类准确率为74.91\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-21Features}
+\caption{选取21个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-21Features}
+\end{figure}
+
+\subsubsection{选取25个特征+SVM Linear}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取25个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev、Mean、stdDev、Mode、Symetriehc、Symetrievc、Fcons、ThickR），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-25Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-25Features}
+\caption{选取25个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-25Features}
+\end{figure}
+
+\subsubsection{选取25个特征+RandomForest}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取25个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev、Mean、stdDev、Mode、Symetriehc、Symetrievc、Fcons、ThickR），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-25Features}，其分类准确率为76.5\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-25Features}
+\caption{选取25个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-25Features}
+\end{figure}
+
+\subsubsection{选取27个特征+SVM Linear}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取27个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev、Mean、stdDev、Mode、Symetriehc、Symetrievc、Fcons、ThickR、Convperim、Convarea），并采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVM-Linear-27Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVM-Linear-27Features}
+\caption{选取27个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-SVM-Linear-27Features}
+\end{figure}
+
+\subsubsection{选取27个特征+RandomForest}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取27个特征：Fractal、Skelarea、Circ、ESD、Elongation、Circexc、CV、SR、Skew、Kurt、MeanPos、PerimAreaexc、FeretAreaexc、PerimFeret、PerimMaj、CDexc、Symetrieh、Symetriev、Mean、stdDev、Mode、Symetriehc、Symetrievc、Fcons、ThickR、Convperim、Convarea），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-27Features}，其分类准确率为76.3\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-27Features}
+\caption{选取27个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-27Features}
+\end{figure}
+
+\subsubsection{选取29个特征+RandomForest}
+在PkID软件中，从67个特征中根据自己的判断选取部分特征进行（选取29个特征：Mean，StdDev，Fractal，Skelarea，Circ，Kurt，Skew，Symetrieh，Symetriev，Symetriehc，Symetrievc，Convperim，Convarea，Elongation，MeanPos，CV，SR，PermAreaexc，FeretAreaexc，PerimFeret，Circexc，CDexc，PerimMaj，ESD，ThickR，Fcons，Nb1，Nb2，Nb3），并采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-29Features}，其分类准确率为76.3\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-29Features}
+\caption{选取29个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-29Features}
+\end{figure}
+
+\subsection{实验分析}
+\begin{itemize}
+\item 位置特征、尺度特征和灰度特征对分类结果没有太大影响。
+\item 使用PkID中的特征能达到的最高分类识别率大概在76\%左右。
+\item 我们自己的SVM和随机森林分类结果要比PkID中的分类结果高1\%左右。
+\item 随机森林的分类准确率要比SVM要高。
+\end{itemize}
+根据以上实验，判断可以从PkID的67个特征中选取一下特征：Mean，StdDev，Fractal，Skelarea，Circ，Kurt，Skew，Symetrieh，Symetriev，Elongation，MeanPos，CV，SR，PermAreaexc，FeretAreaexc，PerimFeret，Circexc，CDexc，{\color{blue}Symetriehc，Symetrievc，Convperim，Convarea}，（PerimMaj，ESD，{\color{blue}ThickR，Fcons，Nb1，Nb2，Nb3}）。
+
+前22个特征，在PkID软件采用SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-SVMLinear-22Features}，其分类准确率为66.07\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-SVMLinear-22Features}
+\caption{选取22个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-SVMLinear-22Features}
+\end{figure}
+
+前22个特征，用自己设计的SVM Linear进行训练和分类得到的结果如图~\ref{fig:PkID-ourSVMLinear-22Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-ourSVMLinear-22Features}
+\caption{选取22个特征采用SVM Linear进行分类的结果}
+\label{fig:PkID-ourSVMLinear-22Features}
+\end{figure}
+
+前22个特征，在PkID软件采用随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-22Features}，其分类准确率为76.66\%。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-RandomForest-22Features}
+\caption{选取22个特征采用随机森林进行分类的结果}
+\label{fig:PkID-RandomForest-22Features}
+\end{figure}
+
+前22个特征，用自己设计的随机森林进行训练和分类得到的结果如图~\ref{fig:PkID-RandomForest-22Features}。
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.0\linewidth]{PkID-ourRandomForest-22Features}
+\caption{选取22个特征采用随机森林进行分类的结果}
+\label{fig:PkID-ourRandomForest-22Features}
+\end{figure}
+
+
+
+
+
+
+

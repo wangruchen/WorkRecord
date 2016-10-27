@@ -1,0 +1,93 @@
+\BOOKMARK [1][-]{section.1}{1 13类浮游动物的特征}{}% 1
+\BOOKMARK [1][-]{section.2}{2 PkID中用到的特征}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{2.1 位置特征}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{2.2 尺寸特征}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{2.3 灰度值特征}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{2.4 形状特征}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{2.5 生物统计特征}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{2.6 还没有查找到的特征}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.7}{2.7 其他特征}{section.2}% 9
+\BOOKMARK [1][-]{section.3}{3 采用PkID中的特征进行实验}{}% 10
+\BOOKMARK [2][-]{subsection.3.1}{3.1 采用PkID中的67个特征进行实验}{section.3}% 11
+\BOOKMARK [3][-]{subsubsection.3.1.1}{3.1.1 PkID中67个特征+SVM Linear}{subsection.3.1}% 12
+\BOOKMARK [3][-]{subsubsection.3.1.2}{3.1.2 PkID中67个特征+RandomForest}{subsection.3.1}% 13
+\BOOKMARK [2][-]{subsection.3.2}{3.2 将67个特征分类进行实验}{section.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.2.1}{3.2.1 形状特征+SVM Linear}{subsection.3.2}% 15
+\BOOKMARK [3][-]{subsubsection.3.2.2}{3.2.2 形状特征+RandomForest}{subsection.3.2}% 16
+\BOOKMARK [3][-]{subsubsection.3.2.3}{3.2.3 灰度特征+SVM Linear}{subsection.3.2}% 17
+\BOOKMARK [3][-]{subsubsection.3.2.4}{3.2.4 灰度特征+RandomForest}{subsection.3.2}% 18
+\BOOKMARK [3][-]{subsubsection.3.2.5}{3.2.5 生物统计特征+SVM Linear}{subsection.3.2}% 19
+\BOOKMARK [3][-]{subsubsection.3.2.6}{3.2.6 生物统计特征+RandomForest}{subsection.3.2}% 20
+\BOOKMARK [3][-]{subsubsection.3.2.7}{3.2.7 不包括位置特征+SVM Linear}{subsection.3.2}% 21
+\BOOKMARK [3][-]{subsubsection.3.2.8}{3.2.8 不包括位置特征+RandomForest}{subsection.3.2}% 22
+\BOOKMARK [3][-]{subsubsection.3.2.9}{3.2.9 不包括位置特征和尺度特征+SVM Linear}{subsection.3.2}% 23
+\BOOKMARK [3][-]{subsubsection.3.2.10}{3.2.10 不包括位置特征和尺度特征+RandomForest}{subsection.3.2}% 24
+\BOOKMARK [3][-]{subsubsection.3.2.11}{3.2.11 不包括位置特征、尺度特征和灰度特征+SVM Linear}{subsection.3.2}% 25
+\BOOKMARK [3][-]{subsubsection.3.2.12}{3.2.12 不包括位置特征、尺度特征和灰度特征+RandomForest}{subsection.3.2}% 26
+\BOOKMARK [3][-]{subsubsection.3.2.13}{3.2.13 不包括位置特征、尺度特征、灰度特征和形状特征+SVM Linear}{subsection.3.2}% 27
+\BOOKMARK [3][-]{subsubsection.3.2.14}{3.2.14 不包括位置特征、尺度特征、灰度特征和形状特征+RandomForest}{subsection.3.2}% 28
+\BOOKMARK [2][-]{subsection.3.3}{3.3 从67个特征中选取部分特征进行实验}{section.3}% 29
+\BOOKMARK [3][-]{subsubsection.3.3.1}{3.3.1 选取16个特征+SVM Linear}{subsection.3.3}% 30
+\BOOKMARK [3][-]{subsubsection.3.3.2}{3.3.2 选取16个特征+RandomForest}{subsection.3.3}% 31
+\BOOKMARK [3][-]{subsubsection.3.3.3}{3.3.3 选取18个特征+SVM Linear}{subsection.3.3}% 32
+\BOOKMARK [3][-]{subsubsection.3.3.4}{3.3.4 选取18个特征+RandomForest}{subsection.3.3}% 33
+\BOOKMARK [3][-]{subsubsection.3.3.5}{3.3.5 选取19个特征+SVM Linear}{subsection.3.3}% 34
+\BOOKMARK [3][-]{subsubsection.3.3.6}{3.3.6 选取19个特征+RandomForest}{subsection.3.3}% 35
+\BOOKMARK [3][-]{subsubsection.3.3.7}{3.3.7 选取21个特征+SVM Linear}{subsection.3.3}% 36
+\BOOKMARK [3][-]{subsubsection.3.3.8}{3.3.8 选取21个特征+RandomForest}{subsection.3.3}% 37
+\BOOKMARK [3][-]{subsubsection.3.3.9}{3.3.9 选取25个特征+SVM Linear}{subsection.3.3}% 38
+\BOOKMARK [3][-]{subsubsection.3.3.10}{3.3.10 选取25个特征+RandomForest}{subsection.3.3}% 39
+\BOOKMARK [3][-]{subsubsection.3.3.11}{3.3.11 选取27个特征+SVM Linear}{subsection.3.3}% 40
+\BOOKMARK [3][-]{subsubsection.3.3.12}{3.3.12 选取27个特征+RandomForest}{subsection.3.3}% 41
+\BOOKMARK [3][-]{subsubsection.3.3.13}{3.3.13 选取29个特征+RandomForest}{subsection.3.3}% 42
+\BOOKMARK [2][-]{subsection.3.4}{3.4 实验分析}{section.3}% 43
+\BOOKMARK [1][-]{section.4}{4 计算机视觉特征提取}{}% 44
+\BOOKMARK [2][-]{subsection.4.1}{4.1 几何参数}{section.4}% 45
+\BOOKMARK [3][-]{subsubsection.4.1.1}{4.1.1 边界的周长}{subsection.4.1}% 46
+\BOOKMARK [3][-]{subsubsection.4.1.2}{4.1.2 边界的曲率}{subsection.4.1}% 47
+\BOOKMARK [3][-]{subsubsection.4.1.3}{4.1.3 面积}{subsection.4.1}% 48
+\BOOKMARK [3][-]{subsubsection.4.1.4}{4.1.4 宽度和高度}{subsection.4.1}% 49
+\BOOKMARK [3][-]{subsubsection.4.1.5}{4.1.5 矩形度}{subsection.4.1}% 50
+\BOOKMARK [3][-]{subsubsection.4.1.6}{4.1.6 体态比}{subsection.4.1}% 51
+\BOOKMARK [3][-]{subsubsection.4.1.7}{4.1.7 圆形性}{subsection.4.1}% 52
+\BOOKMARK [3][-]{subsubsection.4.1.8}{4.1.8 偏心率}{subsection.4.1}% 53
+\BOOKMARK [3][-]{subsubsection.4.1.9}{4.1.9 凸率}{subsection.4.1}% 54
+\BOOKMARK [3][-]{subsubsection.4.1.10}{4.1.10 密集度}{subsection.4.1}% 55
+\BOOKMARK [3][-]{subsubsection.4.1.11}{4.1.11 球状性}{subsection.4.1}% 56
+\BOOKMARK [3][-]{subsubsection.4.1.12}{4.1.12 伸长度}{subsection.4.1}% 57
+\BOOKMARK [3][-]{subsubsection.4.1.13}{4.1.13 叶状性}{subsection.4.1}% 58
+\BOOKMARK [2][-]{subsection.4.2}{4.2 几种典型的特征描述方法}{section.4}% 59
+\BOOKMARK [3][-]{subsubsection.4.2.1}{4.2.1 边界描述子}{subsection.4.2}% 60
+\BOOKMARK [3][-]{subsubsection.4.2.2}{4.2.2 区域描述子}{subsection.4.2}% 61
+\BOOKMARK [2][-]{subsection.4.3}{4.3 特征融合}{section.4}% 62
+\BOOKMARK [3][-]{subsubsection.4.3.1}{4.3.1 贝叶斯融合（Bayes Fusion）}{subsection.4.3}% 63
+\BOOKMARK [1][-]{section.5}{5 选取特征进行实验}{}% 64
+\BOOKMARK [2][-]{subsection.5.1}{5.1 参数特征选取实验}{section.5}% 65
+\BOOKMARK [3][-]{subsubsection.5.1.1}{5.1.1 实验一}{subsection.5.1}% 66
+\BOOKMARK [3][-]{subsubsection.5.1.2}{5.1.2 实验二}{subsection.5.1}% 67
+\BOOKMARK [3][-]{subsubsection.5.1.3}{5.1.3 实验三}{subsection.5.1}% 68
+\BOOKMARK [3][-]{subsubsection.5.1.4}{5.1.4 实验四}{subsection.5.1}% 69
+\BOOKMARK [3][-]{subsubsection.5.1.5}{5.1.5 实验五}{subsection.5.1}% 70
+\BOOKMARK [3][-]{subsubsection.5.1.6}{5.1.6 实验六}{subsection.5.1}% 71
+\BOOKMARK [2][-]{subsection.5.2}{5.2 特征融合方法实验}{section.5}% 72
+\BOOKMARK [3][-]{subsubsection.5.2.1}{5.2.1 实验一（特征融合方法一）}{subsection.5.2}% 73
+\BOOKMARK [3][-]{subsubsection.5.2.2}{5.2.2 实验二（特征融合方法二）}{subsection.5.2}% 74
+\BOOKMARK [2][-]{subsection.5.3}{5.3 融合不同特征实验}{section.5}% 75
+\BOOKMARK [3][-]{subsubsection.5.3.1}{5.3.1 实验一}{subsection.5.3}% 76
+\BOOKMARK [3][-]{subsubsection.5.3.2}{5.3.2 实验二}{subsection.5.3}% 77
+\BOOKMARK [3][-]{subsubsection.5.3.3}{5.3.3 实验三}{subsection.5.3}% 78
+\BOOKMARK [3][-]{subsubsection.5.3.4}{5.3.4 实验四}{subsection.5.3}% 79
+\BOOKMARK [3][-]{subsubsection.5.3.5}{5.3.5 实验五}{subsection.5.3}% 80
+\BOOKMARK [2][-]{subsection.5.4}{5.4 ELM作为分类器的实验}{section.5}% 81
+\BOOKMARK [3][-]{subsubsection.5.4.1}{5.4.1 实验一}{subsection.5.4}% 82
+\BOOKMARK [1][-]{section.6}{6 实验总结}{}% 83
+\BOOKMARK [1][-]{section.7}{7 分类器实验}{}% 84
+\BOOKMARK [2][-]{subsection.7.1}{7.1\040Bayes\040Fusion}{section.7}% 85
+\BOOKMARK [2][-]{subsection.7.2}{7.2\040AdaBoost}{section.7}% 86
+\BOOKMARK [3][-]{subsubsection.7.2.1}{7.2.1 尝试一（MATLAB中的AdaBoost）}{subsection.7.2}% 87
+\BOOKMARK [3][-]{subsubsection.7.2.2}{7.2.2 尝试二（特征融合后采用AdaBoost）}{subsection.7.2}% 88
+\BOOKMARK [3][-]{subsubsection.7.2.3}{7.2.3 尝试三（将二分类改为多分类问题）}{subsection.7.2}% 89
+\BOOKMARK [3][-]{subsubsection.7.2.4}{7.2.4 尝试四（将SVM作为弱分类器进行级联）}{subsection.7.2}% 90
+\BOOKMARK [3][-]{subsubsection.7.2.5}{7.2.5 AdaBoost应用}{subsection.7.2}% 91
+\BOOKMARK [2][-]{subsection.7.3}{7.3 Multi-view Learning（多视角学习）}{section.7}% 92
+\BOOKMARK [2][-]{subsection.7.4}{7.4\040Fuzzy\040Neural\040Network}{section.7}% 93
